@@ -50,7 +50,7 @@ namespace {
                 return opts;
             }
 
-            if (arg == "print-config") {
+            if (arg == "--print-config") {
                 opts.action = CliAction::PrintConfig;
                 if (i + 1 < argc) {
                     opts.config_path = argv[++i];
