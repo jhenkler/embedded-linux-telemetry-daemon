@@ -33,13 +33,7 @@ struct AppConfig {
     std::vector<MetricConfig> metrics;
 };
 
-inline AppConfig load_config_or_throw(const std::string& path) {
-    std::ifstream file(path);
-    if (!file) throw std::runtime_error("Failed to open config: " + path);
-
-    nlohmann::json jsn;
-    file >> jsn;
-
+inline AppConfig parse_config_or_throw(const nlohmann::json& jsn) {
     AppConfig cfg;
 
     cfg.log_level = jsn.value("log_level", cfg.log_level);
@@ -83,7 +77,14 @@ inline AppConfig load_config_or_throw(const std::string& path) {
 
         cfg.metrics.push_back(std::move(metric_cfg));
     }
-
-
     return cfg;
+}
+
+inline AppConfig load_config_or_throw(const std::string& path) {
+    std::ifstream file(path);
+    if (!file) throw std::runtime_error("Failed to open config: " + path);
+
+    nlohmann::json jsn;
+    file >> jsn;
+    return parse_config_or_throw(jsn);
 }
