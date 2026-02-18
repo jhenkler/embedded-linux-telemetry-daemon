@@ -1,7 +1,9 @@
-# Embedded Linux Telemetry daemon
+# Embedded Linux Telemetry Daemon
 
 A production-style embedded Linux telemetry daemon written in C++ that publishes structured, versioned sensor data over MQTT.
 Designed to model real-world device behavior including resilient reconnect logic, runtime configuration, graceful shutdown, and device presence tracking via MQTT Last Will & Testament (LWT).
+
+> For a quick end-to-end run, see Quick Start.
 
 ## Overview
 
@@ -43,6 +45,58 @@ The project is intentionally structured with clear separation of concerns:
 * Application: Main loop + lifecycle management (signals, systemd-friendly behavior)
 
 This structure allows real hardware sensors to be added later with minimal changes.
+
+## Quick Start
+Start a local MQTT broker
+```bash
+docker run -d --name mqtt -p 1883:1883 -p 9001:9001 eclipse-mosquitto:2
+```
+
+Build the daemon
+```bash
+git clone https://github.com/jhenkler/embedded-linux-telemetry-daemon.git
+cd embedded-linux-telemetry-daemon
+
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+```
+> Dependencies: CMake, a C++20 compiler, and libmosquitto-dev
+
+Run with the example configuration
+```bash
+./build/embedded-linux-telemetry-daemon config/config.json
+```
+The daemon will:
+* Connect to the MQTT broker
+* Publish telemetry periodically
+* Publish retained online/offline status (LWT)
+* Automatically reconnect with backoff on disconnect
+
+Observe telemetry
+```bash
+mosquitto_sub -h localhost -p 1883 -t "devices/#" -v
+```
+You should see JSON telemetry and status messages similar to:
+```bash
+devices/pi-sim-01/status {"device":{"client_id":"pi-sim-01"},"schema_version":1,"state":"online","timestamp_s":1771375762}
+devices/pi-sim-01/health {"counters":{"publish_fail":14,"publish_ok":18,"reconnects":7},"device":{"client_id":"pi-sim-01"},"schema_version":1,"seq":15,"timestamp_s":1771375777,"uptime_s":15}
+devices/pi-sim-01/temp {"device":{"client_id":"pi-sim-01"},"metric":{"name":"temperature","unit":"C","value":85.0},"schema_version":1,"seq":17,"timestamp_s":1771375779}
+devices/pi-sim-01/humidity {"device":{"client_id":"pi-sim-01"},"metric":{"name":"humidity","unit":"%","value":382.5},"schema_version":1,"seq":17,"timestamp_s":1771375779}
+```
+
+Stop
+```bash
+Ctrl+C
+docker stop mosquitto && docker rm mosquitto
+```
+
+Run Tests
+```bash
+cmake -S . -B build -DENABLE_TESTS=ON
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+> Unit tests focus on reconnect/backoff behavior, configuration parsing, and schema correctness.
 
 ### Topic Layout
 
@@ -165,6 +219,7 @@ sudo systemctl enable --now embedded-linux-telemetry-daemon
 journalctl -u embedded-linux-telemetry-daemon -f
 ```
 The service includes basic hardening options such as NoNewPrivileges, PrivateTmp, and ProtectSystem.
+
 
 ## Why This Project
 
