@@ -46,6 +46,15 @@ The project is intentionally structured with clear separation of concerns:
 
 This structure allows real hardware sensors to be added later with minimal changes.
 
+### Topic Layout
+
+* Telemetry:
+    - 'devices/<client_id>/<topic_suffix>'
+* Device status (LWT):
+    - 'devices/<client_id>/status'
+* Health/heartbeat:
+    - 'devices/<client_id>/health'
+
 ## Quick Start
 Start a local MQTT broker
 ```bash
@@ -97,15 +106,6 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 > Unit tests focus on reconnect/backoff behavior, configuration parsing, and schema correctness.
-
-### Topic Layout
-
-* Telemetry:
-    - 'devices/<client_id>/<topic_suffix>'
-* Device status (LWT):
-    - 'devices/<client_id>/status'
-* Health/heartbeat:
-    - 'devices/<client_id>/health'
 
 ## Build Instructions
 
