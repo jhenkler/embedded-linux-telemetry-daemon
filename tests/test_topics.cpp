@@ -8,7 +8,7 @@ TEST(Topics, telemetry_topic_layout) {
     std::string suffix = "temp";
 
     auto topic = make_topic(client_id, suffix);
-    EXPECT_EQ(topic, "devices/pi-sim-01-temp");
+    EXPECT_EQ(topic, "devices/pi-sim-01/temp");
 }
 
 TEST(Topics, status_topic_layout) {

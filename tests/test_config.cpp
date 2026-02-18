@@ -20,7 +20,6 @@ TEST(Config, reject_negative_interval) {
 
 TEST(Config, applies_defaults) {
     nlohmann::json jsn = {
-        {"log_level", "infofd"},
         //{"broker", {{"host", "localhost"}, {"port", 1883}, {"keepalive", 10}}},
         {"client_id", "pi-sim-01"},
         //{"interval_ms", 1000},

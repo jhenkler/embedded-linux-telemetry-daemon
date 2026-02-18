@@ -29,12 +29,12 @@ TEST(MqttClientReconnect, in_flight_timeout_clears_gate_and_retries) {
         EXPECT_EQ(calls, 1);
 
         // Advance past timeout (15s)
-        now += (MqttClient::reconnect_in_flight_timeout_for_test() + 1s);
+        now += (MqttClient::reconnect_in_flight_timeout_for_test() + 100s);
 
         mqtt.tick();
         EXPECT_EQ(calls, 1);
 
-        now += 2s;
+        now = mqtt.backoff_next_time_for_test() + 2s;
 
         // should timeout in-flight and try again
         mqtt.tick();

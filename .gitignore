@@ -9,3 +9,9 @@
 /mqtt/config/log
 /mqtt/config/mosquitto.conf
 /mqtt/config/pwfile
+
+#vscode
+.vscode
+
+#lib
+/lib

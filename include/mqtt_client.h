@@ -45,7 +45,7 @@ class MqttClient {
         // ----connection----
         std::atomic<bool> connected_ {false};
         std::atomic<bool> stopping_ {false};
-        std::atomic<bool> loop_started_ {false};;
+        std::atomic<bool> loop_started_ {false};
 
         static void on_connect(struct mosquitto* mosq, void* obj, int rc);
         static void on_disconnect(struct mosquitto* mosq, void* obj, int rc);
@@ -112,5 +112,7 @@ class MqttClient {
         static constexpr auto reconnect_in_flight_timeout_for_test() noexcept {
             return k_reconnect_in_flight_timeout;
         }
+
+        TimePoint backoff_next_time_for_test() const noexcept { return backoff_.next_time(); }
     #endif
 };
