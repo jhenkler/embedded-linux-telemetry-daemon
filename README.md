@@ -3,7 +3,7 @@
 A production-style embedded Linux telemetry daemon written in C++ that publishes structured, versioned sensor data over MQTT.
 Designed to model real-world device behavior including resilient reconnect logic, runtime configuration, graceful shutdown, and device presence tracking via MQTT Last Will & Testament (LWT).
 
-> For a quick end-to-end run, see Quick Start.
+> For a quick end-to-end run, see **Quick Start**.
 
 ## Overview
 
@@ -38,10 +38,10 @@ Key design goals:
 ## Architecture
 
 The project is intentionally structured with clear separation of concerns:
-* Config: JSON parsing + validation ('AppConfig')
-* Transport: MQTT connection management + publishing ('MqttClient')
+* Config: JSON parsing + validation (`AppConfig`)
+* Transport: MQTT connection management + publishing (`MqttClient`)
 * Schema: Telemetry / status payload formats (versioned)
-* Sensors: Pluggable sensor interface ('ISensor') with simulated sensors included
+* Sensors: Pluggable sensor interface (`ISensor`) with simulated sensors included
 * Application: Main loop + lifecycle management (signals, systemd-friendly behavior)
 
 This structure allows real hardware sensors to be added later with minimal changes.
@@ -58,7 +58,7 @@ This structure allows real hardware sensors to be added later with minimal chang
 ## Quick Start
 Start a local MQTT broker
 ```bash
-docker run -d --name mqtt -p 1883:1883 -p 9001:9001 eclipse-mosquitto:2
+docker run -d --name mqtt -p 1883:1883 eclipse-mosquitto:2
 ```
 
 Build the daemon
@@ -69,7 +69,7 @@ cd embedded-linux-telemetry-daemon
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
 ```
-> Dependencies: CMake, a C++20 compiler, and libmosquitto-dev
+> Dependencies: CMake, a C++20 compiler, and `libmosquitto-dev`
 
 Run with the example configuration
 ```bash
@@ -131,7 +131,7 @@ cmake --build .
 
 ### Local MQTT Broker (Docker)
 ```bash
-docker run -d --name mqtt -p 1883:1883 -p 9001:9001 eclipse-mosquitto:2
+docker run -d --name mqtt -p 1883:1883 eclipse-mosquitto:2
 ```
 
 ## Configuration
@@ -160,7 +160,7 @@ Example config.json
 
 ## Running the daemon
 ```bash
-./embedded-linux-telemetry-daemon config/config.json
+./build/embedded-linux-telemetry-daemon config/config.json
 ```
 
 To observe telemetry:
@@ -171,13 +171,13 @@ mosquitto_sub -h localhost -p 1883 -t "devices/#" -v
 ## Example Usage
 ```bash
 # Show version
-./embedded-linux-telemetry-daemon --version
+./build/embedded-linux-telemetry-daemon --version
 
 # Validate config
-./embedded-linux-telemetry-daemon --print-config /etc/embedded-linux-telemetry-daemon/config.json
+./build/embedded-linux-telemetry-daemon --print-config /etc/embedded-linux-telemetry-daemon/config.json
 
 # Normal run
-./embedded-linux-telemetry-daemon /etc/embedded-linux-telemetry-daemon/config.json
+./build/embedded-linux-telemetry-daemon /etc/embedded-linux-telemetry-daemon/config.json
 ```
 
 ## Device Presence (LWT)
