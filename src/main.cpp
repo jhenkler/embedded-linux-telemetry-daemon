@@ -22,6 +22,7 @@
 #include "sensor_factory.h"
 #include "simulated_sensor.h"
 #include "version.h"
+#include "time_utils.h"
 
 static std::atomic<bool> g_running{true};
 static void handle_signal(int) { g_running.store(false, std::memory_order_relaxed); }
