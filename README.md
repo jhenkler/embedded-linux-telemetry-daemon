@@ -1,3 +1,4 @@
+[![ci](https://github.com/jhenkler/embedded-linux-telemetry-daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/jhenkler/embedded-linux-telemetry-daemon/actions/workflows/ci.yml)
 # Embedded Linux Telemetry Daemon
 
 A production-style embedded Linux telemetry daemon written in C++ that publishes structured, versioned sensor data over MQTT.
